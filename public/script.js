@@ -1,1 +1,5 @@
-console.log("howdy");
+const socket = io();
+
+socket.on("connect", () => {
+    console.log(`connected to server with ID = ${socket.id}`);
+});
