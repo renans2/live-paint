@@ -27,6 +27,12 @@ color.addEventListener("change", () => {
     currentColor.b = parseInt(hexColor.substr(5, 2), 16);
 });
 
+// Clear button
+const clearButton = document.getElementById("clear-button");
+clearButton.addEventListener("click", () => {
+    socket.emit("clear-board-to-server");
+});
+
 function setup() {
     WIDTH = Math.min(windowWidth, windowHeight) * 0.9;
     OFFSET = WIDTH / DIMENSION;

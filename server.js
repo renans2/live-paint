@@ -16,11 +16,15 @@ const io = new Server(httpServer, {});
 // Init board
 const DIMENSION = 40;
 const board = [];
-for (let i = 0; i < DIMENSION; i++) {
-    board[i] = [];
+setBoard();
 
-    for (let j = 0; j < DIMENSION; j++) {
-        board[i][j] = { r: 255, g: 255, b: 255 };
+function setBoard() {
+    for (let i = 0; i < DIMENSION; i++) {
+        board[i] = [];
+    
+        for (let j = 0; j < DIMENSION; j++) {
+            board[i][j] = { r: 255, g: 255, b: 255 };
+        }
     }
 }
 
@@ -46,6 +50,12 @@ io.on("connection", (socket) => {
         
         // Send that change to all other clients
         socket.broadcast.emit("change-pixel-to-client", coords, color);
+    });
+
+    // In case user clicks the "Clear board" button
+    socket.on("clear-board-to-server", () => {
+        setBoard();
+        io.emit("board-to-client", board);
     });
 });
 
