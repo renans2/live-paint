@@ -1,36 +1,40 @@
+const DIMENSION = 40;
+let WIDTH;
+let OFFSET;
+let board;
 const socket = io();
 
 socket.on("connect", () => {
     console.log(`connected to server with ID = ${socket.id}`);
 });
 
-const DIMENSION = 40;
-let WIDTH;
-let OFFSET;
-const board = [];
+socket.on("board-to-client", serverBoard => {
+    board = serverBoard;
+});
+
+socket.on("change-pixel-to-client", coords => {
+    const { i, j } = coords;
+    board[i][j] = true;
+});
 
 function setup() {
-    WIDTH = Math.min(windowWidth, windowHeight);
+    WIDTH = Math.min(windowWidth, windowHeight) * 0.9;
     OFFSET = WIDTH / DIMENSION;
 
     createCanvas(WIDTH, WIDTH);
     background(0);
     cursor(CROSS);
-
-    for (let i = 0; i < DIMENSION; i++) {
-        board[i] = [];
-
-        for (let j = 0; j < DIMENSION; j++) {
-            board[i][j] = false;
-        }
-    }
 }
 
 function draw() {
     if (mouseIsPressed) {
         const j = Math.floor(mouseX / OFFSET);
         const i = Math.floor(mouseY / OFFSET);
-        board[i][j] = true;
+        
+        if (0 <= i && i <= DIMENSION && 0 <= j && j <= DIMENSION) {
+            board[i][j] = true;
+            socket.emit("change-pixel-to-server", { i, j });
+        }
     }
 
     for (let i = 0; i < DIMENSION; i++) {
