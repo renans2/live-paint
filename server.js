@@ -20,7 +20,7 @@ for (let i = 0; i < DIMENSION; i++) {
     board[i] = [];
 
     for (let j = 0; j < DIMENSION; j++) {
-        board[i][j] = false;
+        board[i][j] = { r: 255, g: 255, b: 255 };
     }
 }
 
@@ -40,12 +40,12 @@ io.on("connection", (socket) => {
     socket.emit("board-to-client", board);
 
     // Receive pixel change from client's board
-    socket.on("change-pixel-to-server", coords => {
+    socket.on("change-pixel-to-server", (coords, color) => {
         const { i, j } = coords;
-        board[i][j] = true;
+        board[i][j] = color;
         
         // Send that change to all other clients
-        socket.broadcast.emit("change-pixel-to-client", coords);
+        socket.broadcast.emit("change-pixel-to-client", coords, color);
     });
 });
 
