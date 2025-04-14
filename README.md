@@ -1,1 +1,3 @@
-# Paint-like Web App made with Express and Socket.io
+# Paint-like app with WebSockets
+
+### Made with Express, Socket.io and p5.js
