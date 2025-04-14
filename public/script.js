@@ -56,12 +56,14 @@ function draw() {
     if (mouseIsPressed) {
         const j = Math.floor(mouseX / OFFSET);
         const i = Math.floor(mouseY / OFFSET);
-        
+
         // if mouse is inside canvas, 
-        // send message with coords and color to server 
-        if (0 <= i && i <= DIMENSION && 0 <= j && j <= DIMENSION) {
-            board[i][j] = {...currentColor};
-            socket.emit("change-pixel-to-server", { i, j }, currentColor);
+        // send message with coords and color to server
+        if (0 <= i && i <= DIMENSION && 
+            0 <= j && j <= DIMENSION && 
+            JSON.stringify(board[i][j]) !== JSON.stringify(currentColor)) {
+                board[i][j] = {...currentColor};
+                socket.emit("change-pixel-to-server", { i, j }, currentColor);
         }
     }
 
