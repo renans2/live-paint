@@ -3,6 +3,7 @@ let WIDTH;
 let OFFSET;
 let board;
 let currentColor = {r: 0, g: 0, b: 0};
+let grid = true;
 const socket = io();
 
 socket.on("connect", () => {
@@ -33,6 +34,12 @@ clearButton.addEventListener("click", () => {
     socket.emit("clear-board-to-server");
 });
 
+// Grid checkbox
+const gridCheckBox = document.getElementById("grid");
+gridCheckBox.addEventListener("change", () => {
+    grid = gridCheckBox.checked;
+});
+
 function setup() {
     WIDTH = Math.min(windowWidth, windowHeight) * 0.9;
     OFFSET = WIDTH / DIMENSION;
@@ -55,6 +62,8 @@ function draw() {
             socket.emit("change-pixel-to-server", { i, j }, currentColor);
         }
     }
+
+    strokeWeight(grid ? 1 : 0);
 
     for (let i = 0; i < DIMENSION; i++) {
         for (let j = 0; j < DIMENSION; j++) {

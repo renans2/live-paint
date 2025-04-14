@@ -16,19 +16,18 @@ canvas {
     border: 1px solid black;
 }
 
-#color-container {
+#settings-container {
     display: flex;
     justify-content: center;
     align-items: center;
     margin-bottom: 5px;
 }
 
-#color-container label {
+label {
     font-size: large;
-    margin-right: 10px;
+    margin-right: 20px;
 }
 
 #clear-button {
     padding: 5px;
-    margin-left: 10px;
 }
