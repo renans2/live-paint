@@ -8,15 +8,15 @@ const socket = io();
 
 socket.on("connect", () => {
     console.log(`connected to server with ID = ${socket.id}`);
-});
 
-socket.on("board-to-client", serverBoard => {
-    board = serverBoard;
-});
-
-socket.on("change-pixel-to-client", (coords, color) => {
-    const { i, j } = coords;
-    board[i][j] = color;
+    socket.on("board-to-client", serverBoard => {
+        board = serverBoard;
+    });
+    
+    socket.on("change-pixel-to-client", (coords, color) => {
+        const { i, j } = coords;
+        board[i][j] = color;
+    });
 });
 
 // Color input
@@ -50,6 +50,8 @@ function setup() {
 }
 
 function draw() {
+    if (!board) return;
+    
     // Check if user is pressing the mouse
     if (mouseIsPressed) {
         const j = Math.floor(mouseX / OFFSET);
