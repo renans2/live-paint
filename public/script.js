@@ -12,6 +12,11 @@ socket.on("connect", () => {
     socket.on("board-to-client", serverBoard => {
         board = serverBoard;
     });
+
+    socket.on("n_users-to-client", nUsers => {
+        console.log(nUsers);
+        nUsersSpan.innerHTML = `Users connected: ${nUsers}`;
+    });
     
     socket.on("change-pixel-to-client", (coords, color) => {
         const { i, j } = coords;
@@ -39,6 +44,9 @@ const gridCheckBox = document.getElementById("grid");
 gridCheckBox.addEventListener("change", () => {
     grid = gridCheckBox.checked;
 });
+
+// n-users span
+const nUsersSpan = document.getElementById("n-users");
 
 function setup() {
     WIDTH = Math.min(windowWidth, windowHeight) * 0.9;

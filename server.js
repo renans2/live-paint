@@ -18,6 +18,8 @@ const DIMENSION = 40;
 const board = [];
 setBoard();
 
+let nUsers = 0;
+
 function setBoard() {
     for (let i = 0; i < DIMENSION; i++) {
         board[i] = [];
@@ -38,10 +40,14 @@ app.get("/", (_, res) => {
 
 // Establish socket connection with client
 io.on("connection", (socket) => {
-    console.log(`client connected with id = ${socket.id}`);
+    nUsers++;
+    console.log(`${nUsers} users connected`);
 
     // Send current board to client
     socket.emit("board-to-client", board);
+
+    // Send updated nUsers to all clients
+    io.emit("n_users-to-client", nUsers);
 
     // Receive pixel change from client's board
     socket.on("change-pixel-to-server", (coords, color) => {
@@ -56,6 +62,12 @@ io.on("connection", (socket) => {
     socket.on("clear-board-to-server", () => {
         setBoard();
         io.emit("board-to-client", board);
+    });
+
+    // When client disconnects
+    socket.on("disconnect", () => {
+        nUsers--;
+        io.emit("n_users-to-client", nUsers);
     });
 });
 
